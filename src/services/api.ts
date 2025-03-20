@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 export const fetchMetrics = async (interval: string) => {
   const response = await axios.get(`${API_URL}/metrics`, {
