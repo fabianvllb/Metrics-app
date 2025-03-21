@@ -7,14 +7,22 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  TimeScale,
   Tooltip,
   Legend,
   ChartData,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
-import { Scatter } from "react-chartjs-2";
+import { Chart, Scatter } from "react-chartjs-2";
 
-ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(
+  LinearScale,
+  PointElement,
+  LineElement,
+  TimeScale,
+  Tooltip,
+  Legend,
+);
 
 type AverageSoldMetric = {
   time_bucket: string;
@@ -91,12 +99,8 @@ const MetricsChart = () => {
     .map((sale) => ({
       x: new Date(sale.timestamp).getTime(),
       y: sale.amount,
+      salesRep: sale.sales_rep,
     }));
-
-  /*   scatterData = mockIndividualSales.map((sale) => ({
-    x: new Date(sale.timestamp),
-    y: sale.amount,
-  })); */
 
   const chartData: ChartData<"scatter"> = {
     labels: labels,
@@ -119,61 +123,39 @@ const MetricsChart = () => {
         type: "time" as const,
         time: {
           unit: "hour" as "hour",
+          stepSize: 1,
           displayFormats: {
-            hour: "HH:mm", // Format for hours
+            hour: "HH:mm",
           },
         },
-        min: last24Hours.toISOString(),
-        max: now.toISOString(),
+        min: last24Hours.getTime(),
+        max: now.getTime(),
         title: { display: true, text: "Time (Last 24h)" },
         ticks: {
-          source: "auto" as "auto", // Explicitly cast to the expected type
-          autoSkip: false, // Ensures every hour is shown
+          source: "auto" as "auto",
+          autoSkip: false,
         },
       },
       y: {
         beginAtZero: true,
-        title: { display: true, text: "Sales Amount ($)" },
+        title: { display: true, text: "Sales Amount (€)" },
       },
     },
-  };
-
-  /* var options = {
-    legend: {
-      position: "right",
-      labels: {
-        boxWidth: 10,
-      },
-    },
-    scales: {
-      xAxes: [
-        {
-          //ticks: { display: false }
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            const dataPoint = tooltipItem.raw as {
+              x: number;
+              y: number;
+              salesRep?: string;
+            };
+            return `Sales Rep: ${dataPoint.salesRep ?? "Unknown"},\nAmount: $${dataPoint.y},\nat ${new Date(dataPoint.x).toLocaleTimeString()}`;
+          },
         },
-      ],
-    },
-  }; */
-
-  /* const testOptions = {
-    scales: {
-      y: {
-        beginAtZero: true,
       },
     },
   };
-  
-  const testData = {
-    datasets: [
-      {
-        label: 'A dataset',
-        data: Array.from({ length: 100 }, () => ({
-          x: faker.datatype.number({ min: -100, max: 100 }),
-          y: faker.datatype.number({ min: -100, max: 100 }),
-        })),
-        backgroundColor: 'rgba(255, 99, 132, 1)',
-      },
-    ],
-  }; */
 
   const placeholderData = [{ time_bucket: "No Data", avg_value: 0 }];
 
@@ -194,7 +176,7 @@ const MetricsChart = () => {
           ))}
         </div>
 
-        <Scatter options={options} data={chartData} />
+        <Chart type="scatter" options={options} data={chartData} />
       </div>
     </div>
   );
