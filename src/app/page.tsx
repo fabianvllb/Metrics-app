@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -21,45 +20,43 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { postMetric } from "@/services/api";
 import { useState } from "react";
 
 function DataForm() {
-  const [successMsg, setSuccessMsg] = useState("This is a test message");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const formSchema = z.object({
-    name: z.string().nonempty(),
-    value: z.number().int(),
+    sales_rep: z.string().nonempty(),
+    amount: z.number().gte(0),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      value: 0,
+      sales_rep: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
     try {
-      const response = await postMetric(data.name, data.value);
+      const response = await postMetric(data.sales_rep, data.amount);
     } catch (error) {
       console.error(error);
     }
   }
 
   return (
-    <div className="space-y-4 ">
+    <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
             control={form.control}
-            name="name"
+            name="sales_rep"
             render={({ field }) => (
               <FormItem className="flex">
-                <FormLabel>Name:</FormLabel>
+                <FormLabel className="w-16">Sales Rep:</FormLabel>
                 <FormControl>
                   <Input placeholder="" {...field} className="max-w-60" />
                 </FormControl>
@@ -70,10 +67,10 @@ function DataForm() {
 
           <FormField
             control={form.control}
-            name="value"
+            name="amount"
             render={({ field }) => (
               <FormItem className="flex">
-                <FormLabel>Value:</FormLabel>
+                <FormLabel className="w-16">Amount:</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -90,7 +87,7 @@ function DataForm() {
           <div className="flex justify-end">
             <Button
               type="submit"
-              className="w-1/3 bg-blue-500 hover:bg-blue-700"
+              className="w-1/3 bg-blue-700 hover:bg-blue-500"
             >
               Add
             </Button>
@@ -107,13 +104,13 @@ function DataForm() {
 export default function Home() {
   return (
     <main className="p-6 bg-[#f7f7f7] h-screen">
-      <div className="flex  space-y-4">
+      <div className="flex space-y-4">
         <div className="flex flex-col space-y-4 w-1/3 p-5">
           <h1 className="text-2xl font-bold ">Metrics Dashboard</h1>
 
           <Card className="max-w-md">
             <CardHeader>
-              <CardTitle>Add your data</CardTitle>
+              <CardTitle>Add sale</CardTitle>
               <CardDescription></CardDescription>
             </CardHeader>
             <CardContent>
@@ -123,8 +120,6 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col space-y-4 w-1/2 p-5">
-          <h2 className="text-xl font-semibold ">Chart</h2>
-
           <MetricsChart />
         </div>
       </div>

@@ -9,7 +9,10 @@ export const fetchMetrics = async (interval: string) => {
   return response.data;
 };
 
-export const postMetric = async (name: string, value: number) => {
-  const response = await axios.post(`${API_URL}/metrics`, { name, value });
+export const postMetric = async (sales_rep: string, amount: number) => {
+  const response = await axios.post(`${API_URL}/metrics`, {
+    sales_rep,
+    amount,
+  });
   return response.data;
 };
