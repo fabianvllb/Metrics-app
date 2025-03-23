@@ -17,7 +17,6 @@ import "chartjs-adapter-date-fns";
 import { Chart, Line } from "react-chartjs-2";
 import { AverageSoldMetric, IndividualSale } from "@/types/types";
 import { useMetricsData } from "@/context/MetricsContext";
-import { set } from "react-hook-form";
 
 ChartJS.register(
   LinearScale,
