@@ -11,6 +11,9 @@ export const postMetric = async (
       sales_rep,
       amount,
       timestamp,
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
     });
     return response.data;
   } catch (error) {
@@ -23,6 +26,9 @@ export const fetchIndividualSales = async (interval: string) => {
   try {
     const response = await axios.get(`${API_URL}/api/individual-sales`, {
       params: { interval },
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
     });
     return response.data;
   } catch (error) {
@@ -35,6 +41,9 @@ export const fetchMetrics = async (interval: string) => {
   try {
     const response = await axios.get(`${API_URL}/api/metrics`, {
       params: { interval },
+      headers: {
+        "ngrok-skip-browser-warning": "true",
+      },
     });
     return response.data;
   } catch (error) {
