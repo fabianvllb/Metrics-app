@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 export const postMetric = async (
   sales_rep: string,
   amount: number,
   timestamp: string,
 ) => {
   try {
-    const response = await axios.post(`${API_URL}/metrics`, {
+    const response = await axios.post(`${API_URL}/api/metrics`, {
       sales_rep,
       amount,
       timestamp,
@@ -21,7 +21,7 @@ export const postMetric = async (
 
 export const fetchIndividualSales = async (interval: string) => {
   try {
-    const response = await axios.get(`${API_URL}/individual-sales`, {
+    const response = await axios.get(`${API_URL}/api/individual-sales`, {
       params: { interval },
     });
     return response.data;
@@ -33,7 +33,7 @@ export const fetchIndividualSales = async (interval: string) => {
 
 export const fetchMetrics = async (interval: string) => {
   try {
-    const response = await axios.get(`${API_URL}/metrics`, {
+    const response = await axios.get(`${API_URL}/api/metrics`, {
       params: { interval },
     });
     return response.data;
