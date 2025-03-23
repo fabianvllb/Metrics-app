@@ -12,9 +12,10 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  ScatterController,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
-import { Chart, Line } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
 import { AverageSoldMetric, IndividualSale } from "@/types/types";
 import { useMetricsData } from "@/context/MetricsContext";
 
@@ -25,6 +26,7 @@ ChartJS.register(
   TimeScale,
   Tooltip,
   Legend,
+  ScatterController,
 );
 
 /* const mockIndividualSales: IndividualSale[] = [
