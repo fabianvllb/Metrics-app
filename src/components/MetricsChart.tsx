@@ -14,7 +14,7 @@ import {
   ChartOptions,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
-import { Chart } from "react-chartjs-2";
+import { Chart, Line } from "react-chartjs-2";
 import { AverageSoldMetric, IndividualSale } from "@/types/types";
 import { useMetricsData } from "@/context/MetricsContext";
 import { set } from "react-hook-form";
@@ -211,6 +211,56 @@ const MetricsChart = () => {
     ],
   };
 
+  const lineChartData: ChartData<"line"> = {
+    datasets: [
+      {
+        type: "line" as const,
+        label: "Average Sales per Hour",
+        data: lineData,
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderWidth: 2,
+        pointRadius: 6,
+      },
+    ],
+  };
+
+  const lineOptions = {
+    responsive: true,
+    scales: {
+      x: {
+        type: "time" as const,
+        time: {
+          unit: interval as "minute" | "hour" | "day",
+          displayFormats: {
+            minute: "HH:mm",
+            hour: "HH:mm",
+            day: "MMM dd",
+          },
+        },
+        min: lastPeriod.getTime(),
+        max: now.getTime(),
+        title: { display: true, text: `Time (${interval})` },
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: "Sales Amount (€)" },
+      },
+    },
+    plugins: {
+      legend: {
+        position: "right" as const,
+        labels: {
+          boxWidth: 10,
+        },
+      },
+      title: {
+        display: true,
+        text: "Chart.js Line Chart",
+      },
+    },
+  };
+
   const options: ChartOptions = {
     responsive: true,
     scales: {
@@ -239,7 +289,7 @@ const MetricsChart = () => {
     },
     plugins: {
       legend: {
-        position: "right",
+        position: "right" as const,
         labels: {
           boxWidth: 10,
         },
@@ -285,6 +335,7 @@ const MetricsChart = () => {
         </div>
 
         <Chart type="line" options={options} data={chartData} />
+        {/* <Line options={lineOptions} data={lineChartData} /> */}
       </div>
     </div>
   );
