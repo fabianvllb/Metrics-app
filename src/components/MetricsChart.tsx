@@ -13,6 +13,7 @@ import {
   ChartData,
   ChartOptions,
   ScatterController,
+  LineController,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import { Chart } from "react-chartjs-2";
@@ -27,34 +28,8 @@ ChartJS.register(
   Tooltip,
   Legend,
   ScatterController,
+  LineController,
 );
-
-/* const mockIndividualSales: IndividualSale[] = [
-  { timestamp: "2025-03-22T09:05:00.000Z", sales_rep: "Alice", amount: 1300 },
-  { timestamp: "2025-03-22T09:15:00.000Z", sales_rep: "Alice", amount: 1200 },
-  { timestamp: "2025-03-22T09:30:00.000Z", sales_rep: "Bob", amount: 2100 },
-  { timestamp: "2025-03-22T10:10:00.000Z", sales_rep: "Alice", amount: 3100 },
-  { timestamp: "2025-03-22T10:40:00.000Z", sales_rep: "Bob", amount: 2500 },
-  { timestamp: "2025-03-22T11:40:00.000Z", sales_rep: "Bob", amount: 1300 },
-]; */
-
-/* const mockAvgSalesPerMinute: AverageSoldMetric[] = [
-  { time_bucket: "2025-03-22T09:05:00.000Z", avg_sales: 1250 },
-  { time_bucket: "2025-03-22T09:10:00.000Z", avg_sales: 1450 },
-  { time_bucket: "2025-03-22T09:15:00.000Z", avg_sales: 1350 },
-];
-
-const mockAvgSalesPerHour: AverageSoldMetric[] = [
-  { time_bucket: "2025-03-22T09:00:00.000Z", avg_sales: 1533 },
-  { time_bucket: "2025-03-22T10:00:00.000Z", avg_sales: 2800 },
-  { time_bucket: "2025-03-22T11:00:00.000Z", avg_sales: 1300 },
-];
-
-const mockAvgSalesPerDay: AverageSoldMetric[] = [
-  { time_bucket: "2025-03-21T00:00:00.000Z", avg_sales: 1800 },
-  { time_bucket: "2025-03-22T00:00:00.000Z", avg_sales: 2400 },
-  { time_bucket: "2025-03-23T00:00:00.000Z", avg_sales: 2000 },
-]; */
 
 const intervalDurations: Record<string, number> = {
   minute: 60 * 60 * 1000, // 1 hour in milliseconds
@@ -179,18 +154,10 @@ const MetricsChart = () => {
     setLineData(tmpData);
   }, [avgSalesPerMinute, avgSalesPerHour, avgSalesPerDay]);
 
-  /* const labels = Array.from({ length: 24 }, (_, i) => {
-    const date = new Date();
-    date.setHours(date.getHours() - (23 - i));
-    date.setMinutes(0, 0, 0); // Reset minutes and seconds
-    return date;
-  }); */
-
   const now = new Date();
   let lastPeriod = new Date(now.getTime() - intervalDurations[interval]);
 
   const chartData: ChartData<"line" | "scatter"> = {
-    /* labels: labels, */
     datasets: [
       {
         type: "scatter" as const,
