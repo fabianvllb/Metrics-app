@@ -174,7 +174,8 @@ const MetricsChart = () => {
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.5)",
         borderWidth: 2,
-        pointRadius: 6,
+        pointRadius: 2,
+        cubicInterpolationMode: "monotone",
       },
     ],
   };
